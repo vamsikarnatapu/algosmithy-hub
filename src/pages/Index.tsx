@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 const Index = () => {
@@ -20,12 +20,12 @@ const Index = () => {
             Explore a curated problem bank with company tags, frequency, and detailed solutions. Filters like LeetCode, experience like nowhere else.
           </p>
           <div className="mt-8 flex items-center justify-center gap-3">
-            <Button asChild variant="hero" size="lg">
-              <Link to="/problems">Browse Problems</Link>
-            </Button>
-            <Button asChild variant="outline" size="lg">
-              <a href="#features">See Features</a>
-            </Button>
+            <Link to="/problems" className={buttonVariants({ variant: "hero", size: "lg" })}>
+              Browse Problems
+            </Link>
+            <a href="#features" className={buttonVariants({ variant: "outline", size: "lg" })}>
+              See Features
+            </a>
           </div>
         </div>
       </section>

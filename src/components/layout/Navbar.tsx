@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 
 const Navbar = () => {
   return (
@@ -14,9 +14,9 @@ const Navbar = () => {
           }>
             Problems
           </NavLink>
-          <Button asChild variant="hero" size="sm">
-            <Link to="/problems">Get Started</Link>
-          </Button>
+          <Link to="/problems" className={buttonVariants({ variant: "hero", size: "sm" })}>
+            Get Started
+          </Link>
         </div>
       </nav>
     </header>
