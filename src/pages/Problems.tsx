@@ -1,15 +1,18 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { problems } from "@/data/problems";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Badge } from "@/components/ui/badge";
 
 const Problems = () => {
   const [search, setSearch] = useState("");
   const [difficulty, setDifficulty] = useState<string>("All");
+  const [page, setPage] = useState(1);
+  const pageSize = 20;
 
   const filtered = useMemo(() => {
     return problems.filter((p) => {
@@ -18,6 +21,16 @@ const Problems = () => {
       return matchesSearch && matchesDiff;
     });
   }, [search, difficulty]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [search, difficulty]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const current = useMemo(() => {
+    const start = (page - 1) * pageSize;
+    return filtered.slice(start, start + pageSize);
+  }, [filtered, page]);
 
   return (
     <main className="container py-10">
@@ -51,31 +64,65 @@ const Problems = () => {
         </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((p) => (
-          <Link key={p.id} to={`/problems/${p.id}`} className="group">
-            <Card className="h-full transition-all duration-200 group-hover:shadow-elevated">
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between text-base">
-                  <span>{p.title}</span>
+      <section>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Title</TableHead>
+              <TableHead className="w-32">Difficulty</TableHead>
+              <TableHead>Tags</TableHead>
+              <TableHead>Companies</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {current.map((p) => (
+              <TableRow key={p.id}>
+                <TableCell>
+                  <Link to={`/problems/${p.id}`} className="hover:underline">
+                    {p.title}
+                  </Link>
+                </TableCell>
+                <TableCell>
                   <Badge variant="outline">{p.difficulty}</Badge>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm text-muted-foreground space-y-3">
-                <div className="flex flex-wrap gap-2">
-                  {p.tags.map((t) => (
-                    <Badge key={t} variant="secondary">{t}</Badge>
-                  ))}
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {p.companies.slice(0, 3).map((c) => (
-                    <Badge key={c.name} variant="outline">{c.name} · {c.frequency}</Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-wrap gap-1">
+                    {p.tags.map((t) => (
+                      <Badge key={t} variant="secondary">{t}</Badge>
+                    ))}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-wrap gap-1">
+                    {p.companies.slice(0, 3).map((c) => (
+                      <Badge key={c.name} variant="outline">{c.name} · {c.frequency}</Badge>
+                    ))}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+
+        <Pagination className="mt-6">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                href="#"
+                onClick={(e) => { e.preventDefault(); setPage((p) => Math.max(1, p - 1)); }}
+              />
+            </PaginationItem>
+            <PaginationItem>
+              <span className="px-2 text-sm text-muted-foreground">Page {page} of {totalPages}</span>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext
+                href="#"
+                onClick={(e) => { e.preventDefault(); setPage((p) => Math.min(totalPages, p + 1)); }}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </section>
     </main>
   );
