@@ -8,6 +8,8 @@ export interface Problem {
   companies: { name: string; frequency: number }[];
   description: string;
   examples: { input: string; output: string; explanation?: string }[];
+  constraints?: string[];
+  solutions?: { language: string; code: string; explanation?: string }[];
 }
 
 export const problems: Problem[] = [

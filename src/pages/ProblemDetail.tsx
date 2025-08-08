@@ -40,10 +40,20 @@ const ProblemDetail = () => {
         <TabsList>
           <TabsTrigger value="statement">Problem</TabsTrigger>
           <TabsTrigger value="companies">Companies</TabsTrigger>
-          <TabsTrigger value="solutions" disabled>Solutions (coming)</TabsTrigger>
+          <TabsTrigger value="solutions">Solutions</TabsTrigger>
         </TabsList>
         <TabsContent value="statement" className="max-w-none space-y-4">
           <p>{problem.description}</p>
+          <h3>Constraints</h3>
+          {problem.constraints && problem.constraints.length > 0 ? (
+            <ul className="list-disc pl-6">
+              {problem.constraints.map((c, idx) => (
+                <li key={idx}>{c}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-muted-foreground">No constraints provided.</p>
+          )}
           <h3>Examples</h3>
           <ul className="list-disc pl-6">
             {problem.examples.map((ex, idx) => (
@@ -61,7 +71,30 @@ const ProblemDetail = () => {
           </div>
         </TabsContent>
         <TabsContent value="solutions">
-          <p className="text-muted-foreground">Editor and solutions will appear here.</p>
+          {problem.solutions && problem.solutions.length > 0 ? (
+            <div className="space-y-6">
+              {problem.solutions.map((s, idx) => (
+                <article key={idx} className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-medium">{s.language} solution</h4>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => navigator.clipboard.writeText(s.code)}
+                    >
+                      Copy code
+                    </Button>
+                  </div>
+                  {s.explanation && (
+                    <p className="text-sm text-muted-foreground">{s.explanation}</p>
+                  )}
+                  <pre className="rounded-md bg-muted p-3 overflow-auto text-sm"><code>{s.code}</code></pre>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <p className="text-muted-foreground">No solutions available yet.</p>
+          )}
         </TabsContent>
       </Tabs>
     </main>

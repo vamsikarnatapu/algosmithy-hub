@@ -14,7 +14,12 @@ const Navbar = () => {
           }>
             Problems
           </NavLink>
-          <Link to="/problems" className={buttonVariants({ variant: "hero", size: "sm" })}>
+          <NavLink to="/ide" className={({ isActive }) =>
+            `rounded-md px-3 py-2 text-sm ${isActive ? 'text-foreground' : 'text-muted-foreground'} hover:text-foreground hover:bg-accent`
+          }>
+            IDE
+          </NavLink>
+          <Link to="/ide" className={buttonVariants({ variant: "hero", size: "sm" })}>
             Get Started
           </Link>
         </div>

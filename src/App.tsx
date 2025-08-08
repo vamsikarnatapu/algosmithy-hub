@@ -7,6 +7,7 @@ import Navbar from "@/components/layout/Navbar";
 import Index from "./pages/Index";
 import Problems from "./pages/Problems";
 import ProblemDetail from "./pages/ProblemDetail";
+import IDE from "./pages/IDE";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/problems" element={<Problems />} />
           <Route path="/problems/:id" element={<ProblemDetail />} />
+          <Route path="/ide" element={<IDE />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
